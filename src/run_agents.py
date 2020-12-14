@@ -5,10 +5,6 @@ from os import path
 from run import main
 import json
 
-agent_configs = sys.argv[1]
-q = JoinableQueue()
-NUM_THREADS = 24
-
 def run_single_config(queue):
     while True:
         conf_path = queue.get()
@@ -20,12 +16,17 @@ def run_single_config(queue):
             raise e
         queue.task_done()
 
-for i in range(NUM_THREADS):
-    worker = Process(target=run_single_config, args=(q,))
-    worker.daemon = True
-    worker.start()
+agent_configs = sys.argv[1]
+q = JoinableQueue()
+NUM_THREADS = 12
 
-for fname in glob(path.join(agent_configs, "*.json")):
-    q.put(fname)
+if __name__ == '__main__':
+    for i in range(NUM_THREADS):
+        worker = Process(target=run_single_config, args=(q,))
+        worker.daemon = True
+        worker.start()
 
-q.join()
+    for fname in glob(path.join(agent_configs, "*.json")):
+        q.put(fname)
+
+    q.join()

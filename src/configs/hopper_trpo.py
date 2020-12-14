@@ -2,6 +2,7 @@ import os
 import json
 
 import sys
+sys.path.append("../")
 from utils import dict_product, iwt
 
 with open("../src/MuJoCo.json") as f:
@@ -9,14 +10,17 @@ with open("../src/MuJoCo.json") as f:
 
 PARAMS = {
     "game": ["Hopper-v2"],
-    "mode": ["ppo"],
-    "out_dir": ["results/ppo_hopper/agents"],
-    "norm_rewards": ["returns"],
-    "initialization": ["orthogonal"],
-    "anneal_lr": [True],
+    "mode": ["trpo"],
+    "out_dir": ["results/trpo_hopper/agents"],
+    "norm_rewards": ["none"],
+    "initialization": ["xavier"],
+    "anneal_lr": [False],
     "value_clipping": [False],
-    "ppo_lr_adam": [3e-4] * 40,
-    "val_lr": [2.5e-4],
+    "max_kl": [0.13] * 40,
+    "max_kl_final": [0.13],
+    "val_lr": [2e-4],
+    "clip_rewards": [-1],
+    "clip_observations" : [-1],
     "cpu": [True]
 }
 

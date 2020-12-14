@@ -2,6 +2,7 @@ import os
 import json
 
 import sys
+sys.path.append("../")
 from utils import dict_product, iwt
 
 with open("../src/MuJoCo.json") as f:

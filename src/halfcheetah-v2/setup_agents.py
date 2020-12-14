@@ -2,30 +2,27 @@ import os
 import json
 
 import sys
-#sys.path.append("../")
+sys.path.append("../")
 from utils import dict_product, iwt
 
-with open("../src/MuJoCo.json") as f:
+with open("../MuJoCo.json") as f:
     BASE_CONFIG = json.load(f)
 
 PARAMS = {
-    "game": ["Hopper-v2"],
+    "game": ["HalfCheetah-v2"],
     "mode": ["ppo"],
-    "clip_eps": [1e32],
-    "out_dir": ["results/ppo_noclip_hopper/agents"],
-    "norm_rewards": ["rewards"],
+    "out_dir": ["halfcheetah-v2/agents"],
+    "norm_rewards": ["returns"],
     "initialization": ["orthogonal"],
     "anneal_lr": [True],
-    "value_clipping": [False],
-    "ppo_lr_adam": [6e-5] * 40,
-    "entropy_coeff": [-0.005],
-    "lambda": [0.925],
-    "val_lr": [4e-4],
+    "value_clipping": [True],
+    "ppo_lr_adam": iwt(1e-5, 2.9e-4, 7e-5, 5),
+    "val_lr": [1e-4],
     "cpu": [True],
-    "clip_rewards": [2.5],
-    "clip_grad_norm": [4.],
-    "save_iters": [150],
-    "advanced_logging": [True]
+    "clip_rewards": [5.0, 10.0],
+    "norm_states": [True, False],
+    "clip_grad_norm": [0.5, -1],
+    "clip_observations": [5.0, 10.0]
 }
 
 all_configs = [{**BASE_CONFIG, **p} for p in dict_product(PARAMS)]
